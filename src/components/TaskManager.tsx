@@ -74,39 +74,57 @@ export const TaskManager: React.FC = () => {
   const uniqueAssignees = Array.from(new Set(tasks.map(task => task.assignee)));
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl floating-animation"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl floating-animation" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-cyan-400/10 to-teal-400/10 rounded-full blur-3xl floating-animation" style={{ animationDelay: '4s' }}></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
-        <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Task Manager</h1>
-          <p className="text-xl text-muted-foreground">
-            Manage your tasks with natural language
+        <header className="text-center mb-16">
+          <div className="inline-block mb-6">
+            <h1 className="text-7xl font-black gradient-text mb-4">
+              TaskFlow
+            </h1>
+            <div className="h-1 w-32 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full mx-auto"></div>
+          </div>
+          <p className="text-2xl text-slate-600 font-light">
+            Transform thoughts into organized action
           </p>
         </header>
 
-        {/* Task Input */}
-        <div className="mb-8">
-          <TaskInputForm onAddTask={addTask} />
+        {/* Task Input - Hero Section */}
+        <div className="mb-16">
+          <div className="glass-effect rounded-3xl p-8 hover-lift">
+            <TaskInputForm onAddTask={addTask} />
+          </div>
         </div>
 
         {/* Filters and Search */}
-        <div className="mb-6">
-          <FilterBar
-            filter={filter}
-            onFilterChange={setFilter}
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            assignees={uniqueAssignees}
-          />
+        <div className="mb-8">
+          <div className="glass-card rounded-2xl p-6">
+            <FilterBar
+              filter={filter}
+              onFilterChange={setFilter}
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              assignees={uniqueAssignees}
+            />
+          </div>
         </div>
 
         {/* Task List */}
-        <TaskList
-          tasks={filteredAndSortedTasks}
-          onEditTask={setEditingTask}
-          onDeleteTask={deleteTask}
-          onToggleComplete={toggleTaskComplete}
-        />
+        <div className="glass-card rounded-2xl p-8">
+          <TaskList
+            tasks={filteredAndSortedTasks}
+            onEditTask={setEditingTask}
+            onDeleteTask={deleteTask}
+            onToggleComplete={toggleTaskComplete}
+          />
+        </div>
 
         {/* Edit Modal */}
         {editingTask && (

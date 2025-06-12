@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, Sparkles } from 'lucide-react';
 import { parseNaturalLanguage } from '../utils/taskParser';
 import { ParsedTask } from '../types/Task';
 
@@ -66,53 +66,61 @@ export const TaskInputForm: React.FC<TaskInputFormProps> = ({ onAddTask }) => {
   }, [input]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full">
       <form onSubmit={handleSubmit} className="relative">
-        <div className="relative bg-card border border-border rounded-2xl shadow-lg">
+        <div className="relative">
+          {/* AI Sparkle Icon */}
+          <div className="absolute left-6 top-6 z-10">
+            <Sparkles className="h-6 w-6 text-indigo-500 animate-pulse" />
+          </div>
+          
           <textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Add a task... e.g., 'Finish landing page Aman by 11pm 20th June'"
-            className="w-full px-6 py-4 pr-14 bg-transparent border-none resize-none focus:outline-none text-lg placeholder:text-muted-foreground"
+            placeholder="Describe your task naturally... e.g., 'Finish the marketing presentation for Sarah by Friday 3pm P1'"
+            className="w-full pl-16 pr-20 py-6 bg-white/90 backdrop-blur-sm border-2 border-indigo-200/50 rounded-2xl resize-none focus:outline-none text-lg placeholder:text-slate-400 input-glow shadow-xl transition-all duration-300"
             rows={1}
-            style={{ minHeight: '60px' }}
+            style={{ minHeight: '80px' }}
           />
           
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="absolute right-4 bottom-4 p-2 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="absolute right-4 bottom-4 p-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
           >
             {isLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
+              <Loader2 className="h-6 w-6 animate-spin" />
             ) : (
-              <Send className="h-5 w-5" />
+              <Send className="h-6 w-6" />
             )}
           </button>
         </div>
       </form>
 
-      {/* Preview */}
+      {/* Enhanced Preview */}
       {preview && (
-        <div className="mt-4 p-4 bg-muted rounded-xl border border-border">
-          <div className="text-sm text-muted-foreground mb-2">Preview:</div>
+        <div className="mt-6 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200/50 shadow-lg">
+          <div className="flex items-center gap-2 mb-4">
+            <Sparkles className="h-5 w-5 text-indigo-500" />
+            <span className="text-sm font-semibold text-indigo-700">AI Preview</span>
+          </div>
           <div className="flex flex-wrap gap-3">
-            <span className="inline-flex items-center px-3 py-1 bg-card rounded-lg border">
-              <span className="text-sm font-medium">{preview.name}</span>
-            </span>
-            <span className="inline-flex items-center px-3 py-1 bg-card rounded-lg border">
-              <span className="text-sm">👤 {preview.assignee}</span>
-            </span>
+            <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border border-white/50 shadow-md">
+              <span className="text-sm font-semibold text-slate-700">📝 {preview.name}</span>
+            </div>
+            <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border border-white/50 shadow-md">
+              <span className="text-sm text-slate-600">👤 {preview.assignee}</span>
+            </div>
             {preview.dueDate && (
-              <span className="inline-flex items-center px-3 py-1 bg-card rounded-lg border">
-                <span className="text-sm">📅 {new Date(preview.dueDate).toLocaleString()}</span>
-              </span>
+              <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border border-white/50 shadow-md">
+                <span className="text-sm text-slate-600">📅 {new Date(preview.dueDate).toLocaleString()}</span>
+              </div>
             )}
-            <span className={`inline-flex items-center px-3 py-1 rounded-lg priority-${preview.priority.toLowerCase()}`}>
-              <span className="text-sm font-medium">{preview.priority}</span>
-            </span>
+            <div className={`inline-flex items-center px-4 py-2 rounded-xl priority-${preview.priority.toLowerCase()} shadow-md`}>
+              <span className="text-sm font-semibold">{preview.priority}</span>
+            </div>
           </div>
         </div>
       )}
