@@ -32,19 +32,41 @@ export const TaskInputForm: React.FC<TaskInputFormProps> = ({ onAddTask, onAddTa
         if (isAIEnabled) {
           try {
             setIsLoading(true);
-            const parsed = await GeminiService.parseTaskWithAI(singleInput);
-            setPreview(parsed);
-            console.log('AI Parsed preview:', parsed);
+            const parsedTasks = await GeminiService.parseMultipleTasksWithAI(singleInput);
+            
+            if (parsedTasks.length > 1) {
+              // Multiple tasks found - show them in extracted tasks preview
+              setExtractedTasks(parsedTasks);
+              setPreview(null);
+              setShowPreview(true);
+              console.log('AI Parsed multiple tasks preview:', parsedTasks);
+            } else if (parsedTasks.length === 1) {
+              // Single task found - show in single task preview
+              setPreview(parsedTasks[0]);
+              setExtractedTasks([]);
+              setShowPreview(false);
+              console.log('AI Parsed single task preview:', parsedTasks[0]);
+            } else {
+              // No tasks found - fallback to basic parser
+              const parsed = parseNaturalLanguage(singleInput);
+              setPreview(parsed);
+              setExtractedTasks([]);
+              setShowPreview(false);
+            }
           } catch (error) {
             console.error('AI parsing failed, falling back to basic parser:', error);
             const parsed = parseNaturalLanguage(singleInput);
             setPreview(parsed);
+            setExtractedTasks([]);
+            setShowPreview(false);
           } finally {
             setIsLoading(false);
           }
         } else {
           const parsed = parseNaturalLanguage(singleInput);
           setPreview(parsed);
+          setExtractedTasks([]);
+          setShowPreview(false);
           console.log('Basic parsed preview:', parsed);
         }
       }, 500);
@@ -52,7 +74,9 @@ export const TaskInputForm: React.FC<TaskInputFormProps> = ({ onAddTask, onAddTa
       return () => clearTimeout(debounceTimer);
     } else {
       setPreview(null);
+      setExtractedTasks([]);
       setSuggestions([]);
+      setShowPreview(false);
     }
   }, [singleInput, mode, isAIEnabled]);
 
@@ -62,25 +86,50 @@ export const TaskInputForm: React.FC<TaskInputFormProps> = ({ onAddTask, onAddTa
 
     setIsLoading(true);
     try {
-      let parsed: ParsedTask;
-      
       if (isAIEnabled) {
         try {
-          parsed = await GeminiService.parseTaskWithAI(singleInput);
-          // Generate suggestions for follow-up tasks
-          const taskSuggestions = await GeminiService.generateTaskSuggestions(singleInput);
-          setSuggestions(taskSuggestions);
+          // Try to parse multiple tasks first
+          const parsedTasks = await GeminiService.parseMultipleTasksWithAI(singleInput);
+          
+          if (parsedTasks.length > 1) {
+            // Multiple tasks found - use the meeting-style preview
+            setExtractedTasks(parsedTasks);
+            setShowPreview(true);
+            // Generate suggestions for follow-up tasks
+            const taskSuggestions = await GeminiService.generateTaskSuggestions(singleInput);
+            setSuggestions(taskSuggestions);
+          } else if (parsedTasks.length === 1) {
+            // Single task found - add it directly
+            onAddTask(parsedTasks[0]);
+            setSingleInput('');
+            setPreview(null);
+            textareaRef.current?.focus();
+            // Generate suggestions for follow-up tasks
+            const taskSuggestions = await GeminiService.generateTaskSuggestions(singleInput);
+            setSuggestions(taskSuggestions);
+          } else {
+            // No tasks found - fallback to basic parser
+            const parsed = parseNaturalLanguage(singleInput);
+            onAddTask(parsed);
+            setSingleInput('');
+            setPreview(null);
+            textareaRef.current?.focus();
+          }
         } catch (error) {
           console.error('AI parsing failed, using basic parser:', error);
-          parsed = parseNaturalLanguage(singleInput);
+          const parsed = parseNaturalLanguage(singleInput);
+          onAddTask(parsed);
+          setSingleInput('');
+          setPreview(null);
+          textareaRef.current?.focus();
         }
       } else {
-        parsed = parseNaturalLanguage(singleInput);
+        const parsed = parseNaturalLanguage(singleInput);
+        onAddTask(parsed);
+        setSingleInput('');
+        setPreview(null);
+        textareaRef.current?.focus();
       }
-      onAddTask(parsed);
-      setSingleInput('');
-      setPreview(null);
-      textareaRef.current?.focus();
     } catch (error) {
       console.error('Error adding task:', error);
     } finally {
@@ -111,10 +160,17 @@ export const TaskInputForm: React.FC<TaskInputFormProps> = ({ onAddTask, onAddTa
 
   const handleAddAllTasks = () => {
     onAddTasks(extractedTasks);
-    setMeetingInput('');
+    // Clear both inputs depending on the mode
+    if (mode === 'meeting') {
+      setMeetingInput('');
+      meetingTextareaRef.current?.focus();
+    } else {
+      setSingleInput('');
+      textareaRef.current?.focus();
+    }
     setExtractedTasks([]);
     setShowPreview(false);
-    meetingTextareaRef.current?.focus();
+    setSuggestions([]);
   };
 
   const handleClearMeeting = () => {
@@ -164,7 +220,7 @@ export const TaskInputForm: React.FC<TaskInputFormProps> = ({ onAddTask, onAddTa
           }`}
         >
           <Sparkles className="h-5 w-5 inline mr-2" />
-          Single Task
+          Meeting Minutes
         </button>
         <button
           onClick={() => setMode('meeting')}
@@ -175,7 +231,7 @@ export const TaskInputForm: React.FC<TaskInputFormProps> = ({ onAddTask, onAddTa
           }`}
         >
           <FileText className="h-5 w-5 inline mr-2" />
-          Meeting Minutes
+          Single Task
         </button>
       </div>
 
