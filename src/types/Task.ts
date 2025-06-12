@@ -8,6 +8,7 @@ export interface Task {
   dueDate?: string;
   priority: Priority;
   completed: boolean;
+  description?: string;
 }
 
 export interface ParsedTask {
@@ -15,4 +16,5 @@ export interface ParsedTask {
   assignee: string;
   dueDate?: string;
   priority: Priority;
+  description?: string;
 }

@@ -92,10 +92,18 @@ export const parseNaturalLanguage = (input: string): ParsedTask => {
       } else if (dateStr.includes('sunday')) {
         targetDate = getNextWeekday(targetDate, 0);
       } else {
-        // Try to parse as actual date
+        // Try to parse as actual date with current year
         try {
-          const parsed = new Date(dateStr);
+          const currentYear = new Date().getFullYear();
+          let parsed = new Date(dateStr);
+          
+          // If the parsed date doesn't have a year or has an old year, use current year
           if (!isNaN(parsed.getTime())) {
+            // If the date appears to be in the past, assume it's for next year
+            if (parsed.getFullYear() < currentYear || 
+                (parsed.getFullYear() === currentYear && parsed < new Date())) {
+              parsed.setFullYear(currentYear + 1);
+            }
             targetDate = parsed;
           }
         } catch (e) {
@@ -118,6 +126,24 @@ export const parseNaturalLanguage = (input: string): ParsedTask => {
       }
 
       targetDate.setHours(hours, minutes, 0, 0);
+    }
+
+    // Validate that the target date is not in the past
+    const now = new Date();
+    if (targetDate < now) {
+      // If the date is in the past, move it to next occurrence
+      if (dateMatch && dateMatch[0].match(/\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i)) {
+        // For weekdays, get next occurrence
+        const dayName = dateMatch[0].toLowerCase();
+        const dayMap = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
+        const targetDay = dayMap[dayName as keyof typeof dayMap];
+        if (targetDay !== undefined) {
+          targetDate = getNextWeekday(now, targetDay);
+        }
+      } else {
+        // For other dates, add a year
+        targetDate.setFullYear(targetDate.getFullYear() + 1);
+      }
     }
 
     result.dueDate = targetDate.toISOString();

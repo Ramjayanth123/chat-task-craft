@@ -90,6 +90,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               <PriorityBadge priority={task.priority} />
             </div>
 
+            {/* Task Description */}
+            {task.description && (
+              <div className="mb-4 p-3 bg-slate-50/80 rounded-xl border border-slate-200/50">
+                <p className="text-sm text-slate-600 leading-relaxed">{task.description}</p>
+              </div>
+            )}
+
             {/* Task Details */}
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-slate-600">
