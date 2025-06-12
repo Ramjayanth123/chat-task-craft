@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TaskInputForm } from './TaskInputForm';
 import { TaskList } from './TaskList';
@@ -26,6 +25,16 @@ export const TaskManager: React.FC = () => {
     };
     setTasks(prev => [...prev, newTask]);
     console.log('Added new task:', newTask);
+  };
+
+  const addTasks = (taskList: Array<Omit<Task, 'id' | 'completed'>>) => {
+    const newTasks: Task[] = taskList.map((task, index) => ({
+      ...task,
+      id: (Date.now() + index).toString(),
+      completed: false
+    }));
+    setTasks(prev => [...prev, ...newTasks]);
+    console.log('Added batch tasks:', newTasks);
   };
 
   const updateTask = (updatedTask: Task) => {
@@ -99,7 +108,7 @@ export const TaskManager: React.FC = () => {
         {/* Task Input - Hero Section */}
         <div className="mb-16">
           <div className="glass-effect rounded-3xl p-8 hover-lift">
-            <TaskInputForm onAddTask={addTask} />
+            <TaskInputForm onAddTask={addTask} onAddTasks={addTasks} />
           </div>
         </div>
 
