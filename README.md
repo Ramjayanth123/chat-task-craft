@@ -1,73 +1,162 @@
-# Welcome to your Lovable project
+# TaskFlow - AI-Powered Task Management
 
-## Project info
+A modern, intelligent task management application that combines the power of AI with intuitive design to help you organize and manage your tasks efficiently.
 
-**URL**: https://lovable.dev/projects/171990e7-6c90-4bfd-b4a4-9e11c8ae658e
+## 🚀 Features
 
-## How can I edit this code?
+### 🤖 AI-Powered Task Creation
+- **Gemini AI Integration**: Intelligent task parsing from natural language input
+- **Smart Suggestions**: Real-time AI suggestions as you type
+- **Date Recognition**: Automatic detection and validation of due dates
+- **Priority Assignment**: AI-assisted priority level suggestions
 
-There are several ways of editing your application.
+### 📝 Dual Input Modes
+- **Single Task Mode**: Create individual tasks with AI assistance
+- **Meeting Minutes Mode**: Extract multiple tasks from meeting transcripts
+- **Bulk Task Creation**: Process multiple tasks at once from structured text
 
-**Use Lovable**
+### 🎯 Task Management
+- **Visual Task Cards**: Clean, modern task display with priority indicators
+- **Advanced Filtering**: Filter by priority, assignee, status, and due date
+- **Search Functionality**: Quick search across all task fields
+- **Status Tracking**: Mark tasks as pending, in progress, or completed
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/171990e7-6c90-4bfd-b4a4-9e11c8ae658e) and start prompting.
+### 🎨 Modern UI/UX
+- **Responsive Design**: Works seamlessly on desktop and mobile
+- **Beautiful Gradients**: Eye-catching gradient backgrounds
+- **Smooth Animations**: Polished interactions and transitions
+- **Dark/Light Theme**: Adaptive design for any preference
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠️ Setup Instructions
 
-**Use your preferred IDE**
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Gemini API key from Google AI Studio
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+# Clone the repository
+git clone https://github.com/Ramjayanth123/chat-task-craft.git
 
-Follow these steps:
+# Navigate to project directory
+cd chat-task-craft
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+# Create environment file
+cp .env.example .env
 ```
 
-**Edit a file directly in GitHub**
+### Environment Setup
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Create a `.env` file in the root directory and add your Gemini API key:
 
-**Use GitHub Codespaces**
+```env
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+**Getting a Gemini API Key:**
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Create a new API key
+4. Copy the key to your `.env` file
 
-## What technologies are used for this project?
+### Running the Application
 
-This project is built with:
+```bash
+# Start development server
+npm run dev
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Build for production
+npm run build
 
-## How can I deploy this project?
+# Preview production build
+npm run preview
+```
 
-Simply open [Lovable](https://lovable.dev/projects/171990e7-6c90-4bfd-b4a4-9e11c8ae658e) and click on Share -> Publish.
+## 🛠️ Technologies Used
 
-## Can I connect a custom domain to my Lovable project?
+This project is built with modern web technologies:
 
-Yes, you can!
+- **Frontend Framework**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and building
+- **Styling**: Tailwind CSS for utility-first styling
+- **UI Components**: Custom components with modern design
+- **AI Integration**: Google Gemini AI for intelligent task processing
+- **State Management**: React hooks for local state management
+- **Date Handling**: Advanced date parsing and validation
+- **Responsive Design**: Mobile-first approach
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 📁 Project Structure
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+```
+src/
+├── components/          # React components
+│   ├── TaskInputForm.tsx   # Main input form with AI integration
+│   ├── TaskManager.tsx     # Task management and display
+│   └── TaskCard.tsx        # Individual task card component
+├── services/            # External service integrations
+│   └── geminiService.ts    # Gemini AI service
+├── utils/              # Utility functions
+│   ├── dateUtils.ts       # Date parsing and validation
+│   └── meetingParser.ts   # Meeting transcript parsing
+├── types/              # TypeScript type definitions
+│   └── index.ts           # Shared types
+└── App.tsx             # Main application component
+```
+
+## 🚀 Deployment
+
+The application can be deployed to various platforms:
+
+### Vercel (Recommended)
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+```
+
+### Netlify
+```bash
+# Build the project
+npm run build
+
+# Deploy dist folder to Netlify
+```
+
+### GitHub Pages
+```bash
+# Install gh-pages
+npm install --save-dev gh-pages
+
+# Add to package.json scripts:
+# "deploy": "gh-pages -d dist"
+
+# Build and deploy
+npm run build
+npm run deploy
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- Google Gemini AI for intelligent task processing
+- React community for excellent documentation
+- Tailwind CSS for beautiful styling utilities
+- All contributors who help improve this project
