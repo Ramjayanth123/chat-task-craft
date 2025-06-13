@@ -1,12 +1,26 @@
 # Welcome to your Lovable project
 
-# 🚀 Chat Task Craft
+# 🚀 AI Meeting Minutes to Task Converter
 
-> **AI-Powered Task Management Made Simple**
+> **Transform Meeting Notes into Actionable Tasks with AI**
 
-Chat Task Craft is an intelligent task management application that transforms natural language into organized, actionable tasks using Google's Gemini AI. Whether you're processing meeting minutes or creating quick tasks, our app understands context, assigns priorities, and extracts multiple tasks from complex conversations.
+AI Meeting Minutes to Task Converter is an intelligent task management application that transforms natural language meeting notes into organized, actionable tasks using Google's Gemini AI. Whether you're processing meeting minutes or creating quick tasks, our app understands context, assigns priorities, and extracts multiple tasks from complex conversations.
 
-![Chat Task Craft](https://img.shields.io/badge/Status-Active-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB) ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![AI Meeting Minutes to Task Converter](https://img.shields.io/badge/Status-Active-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB) ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+
+## 📸 Application Screenshots
+
+### Meeting Minutes Input & AI Task Extraction
+![Meeting Minutes Processing](https://github.com/user-attachments/assets/meeting-input-screenshot.png)
+*The app intelligently processes meeting notes and extracts multiple tasks with assignees, priorities, and due dates*
+
+### Extracted Tasks Preview
+![Task Extraction Results](https://github.com/user-attachments/assets/task-extraction-screenshot.png)
+*AI-powered task extraction showing parsed tasks with priorities (P1-P4), assignees, and smart date processing*
+
+### Task Management Dashboard
+![Task Management](https://github.com/user-attachments/assets/task-dashboard-screenshot.png)
+*Clean, organized task list with filtering, search, and priority-based organization*
 
 ## ✨ Features
 
@@ -25,7 +39,7 @@ Chat Task Craft is an intelligent task management application that transforms na
 - **Priority Intelligence**: Automatic priority assignment (P1-P4) based on urgency keywords
 - **Assignee Detection**: Identifies who should handle each task
 - **Due Date Parsing**: Understands various date formats and relative time expressions
-- **Task Suggestions**: AI-generated follow-up task recommendations
+- **Task Filtering & Search**: Advanced filtering by priority, assignee, and due date
 
 ### 🎨 Modern UI/UX
 - **Beautiful Interface**: Clean, modern design with gradient backgrounds
@@ -86,27 +100,23 @@ VITE_GEMINI_API_KEY=your_gemini_api_key_here
 
 **Input:**
 ```
-Aman you take the landing page tomorrow by 10am. 
-Saranya prepare dinner by 9pm today. 
-Ram book flight tickets on june 27th
+Aman you take the landing page tomorrow by 10am. P1
+Harika prepare dinner by 9pm today. P2
+Ram book flight tickets on june 27th P4
 ```
 
 **AI Output:**
-- ✅ **Task 1**: Take the landing page | Assignee: Aman | Due: Tomorrow 10:00 AM | Priority: P2
-- ✅ **Task 2**: Prepare dinner | Assignee: Saranya | Due: Today 9:00 PM | Priority: P2  
-- ✅ **Task 3**: Book flight tickets | Assignee: Ram | Due: June 27th | Priority: P3
+- ✅ **Task 1**: Take the landing page | Assignee: Aman | Due: 6/14/2025, 10:00:00 AM | Priority: P1
+- ✅ **Task 2**: Prepare dinner | Assignee: Harika | Due: 6/13/2025, 9:00:00 PM | Priority: P2  
+- ✅ **Task 3**: Book flight tickets | Assignee: Ram | Due: 6/27/2025, 5:30:00 AM | Priority: P4
 
-### Single Task with AI Suggestions
+### Real-Time Task Management
 
-**Input:** `"Urgent: Fix the login bug"`
-
-**AI Output:**
-- **Main Task**: Fix the login bug | Priority: P1 (Urgent)
-- **Suggestions**: 
-  - Test login functionality across browsers
-  - Update authentication documentation
-  - Review security logs for related issues
-
+The application provides:
+- **Instant Preview**: See extracted tasks before adding them
+- **Smart Filtering**: Filter by priority, assignee, or due date
+- **Task Organization**: Automatic sorting and categorization
+- **Progress Tracking**: Visual indicators for task completion
 ## 🎯 Key Features in Detail
 
 ### Intelligent Priority Assignment
@@ -134,9 +144,13 @@ Ram book flight tickets on june 27th
 ```
 src/
 ├── components/          # React components
-│   ├── TaskInputForm.tsx   # Main input interface
+│   ├── TaskInputForm.tsx   # Main input interface with dual modes
 │   ├── TaskList.tsx        # Task display and management
 │   ├── TaskCard.tsx        # Individual task component
+│   ├── TaskManager.tsx     # Main task management container
+│   ├── TaskEditModal.tsx   # Task editing functionality
+│   ├── FilterBar.tsx       # Advanced filtering controls
+│   ├── PriorityBadge.tsx   # Priority display component
 │   └── ui/                 # shadcn/ui components
 ├── services/
 │   └── geminiService.ts    # AI integration service
@@ -145,7 +159,14 @@ src/
 │   └── meetingParser.ts    # Meeting transcript processing
 ├── types/
 │   └── Task.ts            # TypeScript type definitions
-└── hooks/                 # Custom React hooks
+├── hooks/                 # Custom React hooks
+│   ├── use-mobile.tsx     # Mobile detection hook
+│   └── use-toast.ts       # Toast notification hook
+├── pages/
+│   ├── Index.tsx          # Main application page
+│   └── NotFound.tsx       # 404 error page
+└── lib/
+    └── utils.ts           # Utility functions
 ```
 
 ### Available Scripts
@@ -211,26 +232,4 @@ If you encounter any issues or have questions:
 
 ---
 
-**Made with ❤️ by the Chat Task Craft Team**
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/171990e7-6c90-4bfd-b4a4-9e11c8ae658e) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+**Made with ❤️ by the AI Meeting Minutes to Task Converter Team**
